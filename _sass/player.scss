@@ -57,11 +57,23 @@ body.is-seed .show-leech {
 	transition: .5s .5s background-color ease-in-out;
 }
 
+.sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
 // CSS-only tooltip for the copy button
 #share-url-btn {
 	position: relative;
 
-	&.tooltip-visible::after {
+	&.tooltip-visible::after,
+	&:focus::after {
 		content: attr(data-tooltip);
 		position: absolute;
 		bottom: 100%;

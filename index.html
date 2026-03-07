@@ -11,7 +11,8 @@ layout: default
 <hr>
 
 <form id="magnet-input">
-	<input name="torrentId" placeholder="magnet:"><button type="submit">Play</button>
+	<label for="torrentId" class="sr-only">Magnet URI or torrent URL</label>
+	<input id="torrentId" name="torrentId" placeholder="magnet:"><button type="submit">Play</button>
 </form>
 
 <div id="hero">
@@ -41,7 +42,8 @@ layout: default
 
 		<div id="share-clipboard">
 			<p>Share this video:</p>
-			<input id="share-url" type="text" readonly><button id="share-url-btn" type="button" data-tooltip="Copy to clipboard"><img class="clippy" src="{{ site.baseurl }}/assets/clippy.svg" alt="Copy to clipboard"></button>
+			<label for="share-url" class="sr-only">Share URL</label>
+			<input id="share-url" type="text" readonly><button id="share-url-btn" type="button" aria-label="Copy to clipboard" data-tooltip="Copy to clipboard"><img class="clippy" src="{{ site.baseurl }}/assets/clippy.svg" alt=""></button>
 		</div>
 	</div>
 </div>

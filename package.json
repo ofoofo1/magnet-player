@@ -15,10 +15,10 @@
     "pretty-bytes": "^4.0.2"
   },
   "devDependencies": {
-    "browserify": "^17.0.1"
+    "esbuild": "^0.27.3"
   },
   "scripts": {
-    "build": "browserify js/main.js -o js/bundle.js"
+    "build": "esbuild js/main.js --bundle --outfile=js/bundle.js --platform=browser --format=iife --external:jquery"
   },
   "homepage": "https://ferrolho.github.io/magnet-player/",
   "keywords": [

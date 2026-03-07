@@ -116,7 +116,7 @@ function onTorrent(torrent) {
 
     // Trigger statistics refresh
     torrent.on('done', onDone)
-    const progressInterval = setInterval(onProgress, 500)
+    setInterval(onProgress, 500)
     onProgress()
 
     function onProgress() {
@@ -141,7 +141,6 @@ function onTorrent(torrent) {
     }
 
     function onDone() {
-        clearInterval(progressInterval)
         document.body.classList.add('is-seed')
         onProgress()
     }

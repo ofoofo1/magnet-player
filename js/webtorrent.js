@@ -40,6 +40,17 @@ navigator.serviceWorker.register('sw.min.js', { scope: './' })
 	.then(function () {
 		return navigator.serviceWorker.ready
 	})
+	.then(function (registration) {
+		var sw = registration.active || registration.installing || registration.waiting
+		if (sw.state === 'activated') {
+			return registration
+		}
+		return new Promise(function (resolve) {
+			sw.addEventListener('statechange', function () {
+				if (sw.state === 'activated') resolve(registration)
+			})
+		})
+	})
 	.then(function (controller) {
 		client.createServer({ controller: controller })
 		ready = true

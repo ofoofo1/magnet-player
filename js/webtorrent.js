@@ -1,5 +1,16 @@
-var moment = require('moment')
-var prettyBytes = require('pretty-bytes')
+function formatBytes(bytes) {
+    if (bytes === 0) return '0 B'
+    var units = ['B', 'kB', 'MB', 'GB', 'TB']
+    var i = Math.floor(Math.log(bytes) / Math.log(1000))
+    return parseFloat((bytes / Math.pow(1000, i)).toFixed(1)) + ' ' + units[i]
+}
+
+function formatDuration(seconds) {
+    if (seconds < 60) return seconds + ' seconds'
+    if (seconds < 3600) return Math.round(seconds / 60) + ' minutes'
+    if (seconds < 86400) return Math.round(seconds / 3600) + ' hours'
+    return Math.round(seconds / 86400) + ' days'
+}
 
 // HTML elements
 var body = document.body
@@ -103,7 +114,7 @@ function onTorrent(torrent) {
     streamedFileName.textContent = largestFile.name
 
     // Update clipboard share url
-    document.getElementById('share-url').value = 'https://ferrolho.github.io/magnet-player/#' + torrent.infoHash
+    document.getElementById('share-url').value = window.location.origin + window.location.pathname + '#' + torrent.infoHash
 
     // Stream the file in the browser
     var video = document.createElement('video')
@@ -120,7 +131,7 @@ function onTorrent(torrent) {
 
     // Trigger statistics refresh
     torrent.on('done', onDone)
-    setInterval(onProgress, 500)
+    var progressInterval = setInterval(onProgress, 500)
     onProgress()
 
     // Statistics
@@ -131,25 +142,26 @@ function onTorrent(torrent) {
         // Progress
         var percent = Math.round(torrent.progress * 100 * 100) / 100
         progressBar.style.width = percent + '%'
-        downloaded.textContent = prettyBytes(torrent.downloaded)
-        total.textContent = prettyBytes(torrent.length)
+        downloaded.textContent = formatBytes(torrent.downloaded)
+        total.textContent = formatBytes(torrent.length)
 
         // Remaining time
         var rem
         if (torrent.done) {
             rem = 'Done'
         } else {
-            rem = moment.duration(torrent.timeRemaining / 1000, 'seconds').humanize()
+            rem = formatDuration(Math.round(torrent.timeRemaining / 1000))
             rem = rem[0].toUpperCase() + rem.substring(1) + ' remaining'
         }
         remaining.textContent = rem
 
         // Speed rates
-        downloadSpeed.textContent = prettyBytes(torrent.downloadSpeed) + '/s'
-        uploadSpeed.textContent = prettyBytes(torrent.uploadSpeed) + '/s'
+        downloadSpeed.textContent = formatBytes(torrent.downloadSpeed) + '/s'
+        uploadSpeed.textContent = formatBytes(torrent.uploadSpeed) + '/s'
     }
 
     function onDone() {
+        clearInterval(progressInterval)
         body.classList.add('is-seed')
         onProgress()
     }

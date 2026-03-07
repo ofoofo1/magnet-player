@@ -71,7 +71,7 @@ function onTorrent(torrent) {
 	}
 
 	// Display name of the file being streamed
-	$streamedFileName.html(largestFile.name)
+	$streamedFileName.text(largestFile.name)
 
 	// Update clipboard share url
 	$('#share-url').val('https://ferrolho.github.io/magnet-player/#' + torrent.infoHash);
@@ -93,13 +93,13 @@ function onTorrent(torrent) {
 	// Statistics
 	function onProgress () {
 		// Peers
-		$numPeers.html(torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers'))
+		$numPeers.text(torrent.numPeers + (torrent.numPeers === 1 ? ' peer' : ' peers'))
 
 		// Progress
 		var percent = Math.round(torrent.progress * 100 * 100) / 100
 		$progressBar.width(percent + '%')
-		$downloaded.html(prettyBytes(torrent.downloaded))
-		$total.html(prettyBytes(torrent.length))
+		$downloaded.text(prettyBytes(torrent.downloaded))
+		$total.text(prettyBytes(torrent.length))
 
 		// Remaining time
 		var remaining
@@ -109,11 +109,11 @@ function onTorrent(torrent) {
 			remaining = moment.duration(torrent.timeRemaining / 1000, 'seconds').humanize()
 			remaining = remaining[0].toUpperCase() + remaining.substring(1) + ' remaining'
 		}
-		$remaining.html(remaining)
+		$remaining.text(remaining)
 
 		// Speed rates
-		$downloadSpeed.html(prettyBytes(torrent.downloadSpeed) + '/s')
-		$uploadSpeed.html(prettyBytes(torrent.uploadSpeed) + '/s')
+		$downloadSpeed.text(prettyBytes(torrent.downloadSpeed) + '/s')
+		$uploadSpeed.text(prettyBytes(torrent.uploadSpeed) + '/s')
 	}
 
 	function onDone () {

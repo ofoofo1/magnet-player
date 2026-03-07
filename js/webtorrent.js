@@ -29,10 +29,27 @@ global.WEBTORRENT_ANNOUNCE = announceList
 })
 
 var client = new WebTorrent()
+var ready = false
 
 client.on('error', function(err) {
 	console.error('ERROR: ' + err.message)
 })
+
+// Register service worker and create server for streaming
+navigator.serviceWorker.register('sw.min.js', { scope: './' })
+	.then(function () {
+		return navigator.serviceWorker.ready
+	})
+	.then(function (controller) {
+		client.createServer({ controller: controller })
+		ready = true
+
+		// Process any pending downloads
+		onHashChange()
+	})
+	.catch(function (err) {
+		console.error('Service worker registration failed:', err)
+	})
 
 // Download by form input
 $('form').submit(function(e) {
@@ -45,9 +62,9 @@ $('form').submit(function(e) {
 })
 
 // Download by URL hash
-onHashChange()
 window.addEventListener('hashchange', onHashChange)
 function onHashChange () {
+	if (!ready) return
 	var hash = decodeURIComponent(window.location.hash.substring(1)).trim()
 	if (hash !== '') downloadTorrent(hash)
 }
@@ -77,7 +94,11 @@ function onTorrent(torrent) {
 	$('#share-url').val('https://ferrolho.github.io/magnet-player/#' + torrent.infoHash);
 
 	// Stream the file in the browser
-	largestFile.appendTo('#output')
+	var video = document.createElement('video')
+	video.controls = true
+	video.autoplay = true
+	document.getElementById('output').appendChild(video)
+	largestFile.streamTo(video)
 
 	// hide magnet input
 	$('#magnet-input').slideUp()

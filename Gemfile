@@ -18,10 +18,10 @@ gem "minima"
 # uncomment the line below. To upgrade, run `bundle update github-pages`.
 # gem "github-pages", group: :jekyll_plugins
 
-# If you have any plugins, put them here!
-# group :jekyll_plugins do
-#   gem "jekyll-github-metadata", "~> 1.0"
-# end
+group :jekyll_plugins do
+  gem "jekyll-seo-tag"
+  gem "jekyll-sitemap"
+end
 
 # Required after upgrading from Ruby v2 to v3
 # (see https://stackoverflow.com/a/67048226/2047110)

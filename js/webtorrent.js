@@ -88,28 +88,70 @@ function onTorrent(torrent) {
     torrent.on('warning', console.log)
     torrent.on('error', console.log)
 
-    // Find largest file
-    let largestFile = torrent.files[0]
-    for (let i = 1; i < torrent.files.length; i++) {
-        if (torrent.files[i].length > largestFile.length)
-            largestFile = torrent.files[i]
-    }
-
-    // Display name of the file being streamed
-    streamedFileName.textContent = largestFile.name
-
     // Update clipboard share url
     document.getElementById('share-url').value = `${window.location.origin}${window.location.pathname}#${torrent.infoHash}`
+
+    // hide magnet input
+    document.getElementById('magnet-input').hidden = true
+
+    // Find largest file and auto-play it
+    const largestFile = torrent.files.reduce((a, b) => b.length > a.length ? b : a)
+    playFile(torrent, largestFile)
+
+    // Show file picker for multi-file torrents
+    if (torrent.files.length > 1) {
+        showFilePicker(torrent)
+    }
+}
+
+function showFilePicker(torrent) {
+    const picker = document.getElementById('file-picker')
+    const list = document.getElementById('file-list')
+    list.replaceChildren()
+
+    // Toggle collapse on header click
+    document.getElementById('file-picker-toggle').addEventListener('click', () => {
+        picker.classList.toggle('collapsed')
+    })
+
+    const sortedFiles = [...torrent.files].sort((a, b) => b.length - a.length)
+
+    for (const file of sortedFiles) {
+        const li = document.createElement('li')
+        const btn = document.createElement('button')
+        btn.type = 'button'
+        const nameSpan = document.createElement('span')
+        nameSpan.textContent = file.name
+        const sizeSpan = document.createElement('small')
+        sizeSpan.textContent = formatBytes(file.length)
+        btn.appendChild(nameSpan)
+        btn.appendChild(sizeSpan)
+        btn.addEventListener('click', () => {
+            picker.classList.add('collapsed')
+            playFile(torrent, file)
+        })
+        li.appendChild(btn)
+        list.appendChild(li)
+    }
+
+    picker.hidden = false
+}
+
+function playFile(torrent, file) {
+    // Display name of the file being streamed
+    streamedFileName.textContent = file.name
+
+    // Replace existing video if switching files
+    const output = document.getElementById('output')
+    const existingVideo = output.querySelector('video')
+    if (existingVideo) existingVideo.remove()
 
     // Stream the file in the browser
     const video = document.createElement('video')
     video.controls = true
     video.autoplay = true
-    document.getElementById('output').appendChild(video)
-    largestFile.streamTo(video)
-
-    // hide magnet input
-    document.getElementById('magnet-input').hidden = true
+    output.appendChild(video)
+    file.streamTo(video)
 
     // show player
     document.getElementById('hero').style.display = 'block'

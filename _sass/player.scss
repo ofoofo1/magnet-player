@@ -57,6 +57,72 @@ body.is-seed .show-leech {
 	transition: .5s .5s background-color ease-in-out;
 }
 
+#file-picker {
+	#file-picker-toggle {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 8px 12px;
+		margin-bottom: 4px;
+		cursor: pointer;
+		border: none;
+		background: none;
+		color: $blue;
+		font-size: 1.1em;
+		font-weight: bold;
+
+		#file-picker-arrow {
+			transition: transform 0.2s;
+		}
+	}
+
+	&.collapsed {
+		#file-picker-arrow {
+			transform: rotate(-90deg);
+		}
+
+		ul {
+			display: none;
+		}
+	}
+
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+	}
+
+	li {
+		margin-bottom: 4px;
+	}
+
+	li button {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 8px 12px;
+		cursor: pointer;
+		border: 1px solid darken($yellow-2, 15%);
+		background: lighten($yellow-2, 5%);
+		border-radius: 4px;
+		color: $blue;
+		text-align: left;
+
+		&:hover {
+			background-color: $yellow-1;
+			border-color: $blue;
+		}
+
+		small {
+			flex-shrink: 0;
+			margin-left: 12px;
+			opacity: 0.7;
+		}
+	}
+}
+
 .sr-only {
 	position: absolute;
 	width: 1px;

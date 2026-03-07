@@ -15,6 +15,14 @@ layout: default
 	<input id="torrentId" name="torrentId" placeholder="magnet:"><button type="submit">Play</button>
 </form>
 
+<div id="file-picker" hidden>
+	<button id="file-picker-toggle" type="button">
+		<span>Select a file to play</span>
+		<small id="file-picker-arrow">&#x25BC;</small>
+	</button>
+	<ul id="file-list"></ul>
+</div>
+
 <div id="hero">
 	<div id="output">
 		<div id="progressBar"></div>

@@ -24,6 +24,6 @@ Because most people use native torrent clients like *BitTorrent*, *Transmission*
 
 > Will I be able to stream more torrents in the future?
 
-**Yes!** It is just a matter of time until developers add WebTorrent support for the most popular native torrent clients. **[Vuze](http://www.vuze.com/)** [already has support](https://wiki.vuze.com/w/WebTorrent) for WebTorrent!
+**Yes!** Several torrent clients now support WebTorrent, including **[Vuze](https://www.vuze.com/)**, **[Brave](https://brave.com/)**, and clients built on **[libtorrent](https://libtorrent.org/)**.
 
-You can subscribe to [this issue](https://github.com/feross/webtorrent/issues/369) for updates on this matter.
+You can subscribe to [this issue](https://github.com/webtorrent/webtorrent/issues/369) for updates on this matter.

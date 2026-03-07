@@ -81,10 +81,32 @@ function onHashChange() {
 }
 
 function downloadTorrent(torrentId) {
-    client.add(torrentId, onTorrent)
+    const status = document.getElementById('loading-status')
+    let elapsed = 0
+    status.textContent = 'Searching for peers\u2026 (0s)'
+    status.hidden = false
+
+    const torrent = client.add(torrentId, onTorrent)
+
+    const timer = setInterval(() => {
+        elapsed++
+        if (torrent.numPeers > 0 || torrent.done) {
+            clearInterval(timer)
+            return
+        }
+        if (elapsed >= 30) {
+            status.textContent = `No peers found after ${elapsed}s. Only torrents with WebRTC seeders are supported in the browser.`
+        } else {
+            status.textContent = `Searching for peers\u2026 (${elapsed}s)`
+        }
+    }, 1000)
+
+    torrent.on('ready', () => clearInterval(timer))
 }
 
 function onTorrent(torrent) {
+    document.getElementById('loading-status').hidden = true
+
     torrent.on('warning', console.log)
     torrent.on('error', console.log)
 

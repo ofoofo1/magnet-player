@@ -1,9 +1,10 @@
 require('./webtorrent.js');
 
-var clipboard = new Clipboard('#share-url-btn');
-clipboard.on('success', function (e) {
-	$('#share-url-btn').attr('title', 'Copied!').tooltip('fixTitle').tooltip('show');
-	e.clearSelection();
+$('#share-url-btn').on('click', function () {
+	var text = $('#share-url').val();
+	navigator.clipboard.writeText(text).then(function () {
+		$('#share-url-btn').attr('title', 'Copied!').tooltip('fixTitle').tooltip('show');
+	});
 });
 
 $(window).bind("resize", function () {
@@ -18,17 +19,6 @@ $(document).ready(function () {
 	});
 
 	fitMagnetInput();
-
-	new KudosPlease({
-		el: '.kudos',
-		duration: 1500,
-		persistent: true,
-		status: {
-			alpha: 'fontelico-emo-shoot',
-			beta: 'fontelico-emo-shoot',
-			gamma: 'fontelico-emo-beer'
-		}
-	});
 });
 
 function fitMagnetInput() {

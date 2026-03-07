@@ -14,10 +14,10 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: Magnet Player
+tagline: "Stream torrents in your browser"
 author: Henrique Ferrolho
 email: henrique.ferrolho@gmail.com
-description: > # this means to ignore newlines until "baseurl:"
-  A place for streaming torrents directly from your browser.
+description: "Stream torrents directly from your browser using WebTorrent. Paste a magnet link or torrent URL and watch videos instantly with peer-to-peer WebRTC streaming."
 baseurl: "/magnet-player" # the subpath of your site, e.g. /blog
 url: "https://ferrolho.github.io" # the base hostname & protocol for your site
 twitter_username: hferrolho
@@ -26,5 +26,23 @@ github_username:  ferrolho
 # Build settings
 markdown: kramdown
 theme: minima
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
 exclude:
   - CLAUDE.md
+
+# SEO
+logo: /magnet-player/assets/logo.svg
+defaults:
+  - scope:
+      path: ""
+    values:
+      image: /assets/thumbnail.png
+twitter:
+  username: hferrolho
+  card: summary_large_image
+social:
+  name: Henrique Ferrolho
+  links:
+    - https://github.com/ferrolho

@@ -18,7 +18,7 @@
     "esbuild": "^0.27.3"
   },
   "scripts": {
-    "build": "esbuild js/main.js --bundle --outfile=js/bundle.js --platform=browser --format=iife --external:jquery"
+    "build": "esbuild js/main.js --bundle --outfile=js/bundle.js --platform=browser --format=iife"
   },
   "homepage": "https://ferrolho.github.io/magnet-player/",
   "keywords": [

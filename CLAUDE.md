@@ -32,11 +32,11 @@ The site is served from the `gh-pages` branch (which is also the main/only branc
 
 - **Jekyll** handles site generation (`_config.yml`, `_layouts/`, `_includes/`, `_sass/`)
 - **`js/webtorrent.js`** — Core torrent logic: registers a service worker, creates a WebTorrent client with `createServer()`, handles form/URL-hash input, downloads torrents, streams the largest file via `file.streamTo()` into a `<video>` element, and updates download statistics
-- **`js/main.js`** — UI glue: clipboard (native Clipboard API), responsive input sizing. Requires `webtorrent.js` and is the esbuild entry point
+- **`js/main.js`** — UI glue: clipboard (native Clipboard API). Requires `webtorrent.js` and is the esbuild entry point
 - **`js/bundle.js`** — esbuild output (committed to repo, must be regenerated after JS changes)
 - **`js/webtorrent.min.js`** — Vendored WebTorrent v2.8.5 pre-built browser bundle (ESM converted to IIFE via esbuild, exposes `WebTorrent` global)
 - **`sw.min.js`** — WebTorrent service worker for browser-based media streaming (required by `file.streamTo()`)
-- jQuery and Bootstrap JS are loaded from CDN / vendored in `js/`
+- No jQuery or Bootstrap — all JS is vanilla, tooltip is CSS-only
 - Styling uses the Jekyll **minima** theme with custom SCSS in `_sass/player.scss`
 - SEO handled by `jekyll-seo-tag` and `jekyll-sitemap` plugins
 
@@ -46,4 +46,4 @@ The site is served from the `gh-pages` branch (which is also the main/only branc
 - Torrent sharing works via URL hash fragment (e.g., `#<infoHash>`), parsed in `onHashChange()` in `webtorrent.js`
 - The announce tracker list in `webtorrent.js` is filtered to WebSocket-only (`wss://`) trackers for browser compatibility
 - The service worker must be fully activated before `createServer()` is called — the code waits for the `activated` state explicitly
-- All DOM text insertion uses `.text()` (not `.html()`) to prevent XSS via torrent file names
+- All DOM text insertion uses `.textContent` (not `.innerHTML`) to prevent XSS via torrent file names

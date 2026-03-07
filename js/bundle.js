@@ -4039,15 +4039,15 @@
     "js/webtorrent.js"() {
       var moment = require_moment();
       var prettyBytes = require_pretty_bytes();
-      var $body = $("body");
-      var $progressBar = $("#progressBar");
-      var $streamedFileName = $("#streamedFileName");
-      var $numPeers = $("#numPeers");
-      var $downloaded = $("#downloaded");
-      var $total = $("#total");
-      var $remaining = $("#remaining");
-      var $uploadSpeed = $("#uploadSpeed");
-      var $downloadSpeed = $("#downloadSpeed");
+      var body = document.body;
+      var progressBar = document.getElementById("progressBar");
+      var streamedFileName = document.getElementById("streamedFileName");
+      var numPeers = document.getElementById("numPeers");
+      var downloaded = document.getElementById("downloaded");
+      var total = document.getElementById("total");
+      var remaining = document.getElementById("remaining");
+      var uploadSpeed = document.getElementById("uploadSpeed");
+      var downloadSpeed = document.getElementById("downloadSpeed");
       var announceList = [
         ["udp://tracker.openbittorrent.com:80"],
         ["udp://tracker.opentrackr.org:1337"],
@@ -4084,10 +4084,10 @@
       }).catch(function(err) {
         console.error("Service worker registration failed:", err);
       });
-      $("form").submit(function(e) {
+      document.getElementById("magnet-input").addEventListener("submit", function(e) {
         e.preventDefault();
         if (!ready) return;
-        var torrentId = $("form input[name=torrentId]").val();
+        var torrentId = document.querySelector("#magnet-input input[name=torrentId]").value;
         if (torrentId.length > 0)
           downloadTorrent(torrentId);
       });
@@ -4110,37 +4110,37 @@
           if (torrent.files[i].length > largestFile.length)
             largestFile = torrent.files[i];
         }
-        $streamedFileName.text(largestFile.name);
-        $("#share-url").val("https://ferrolho.github.io/magnet-player/#" + torrent.infoHash);
+        streamedFileName.textContent = largestFile.name;
+        document.getElementById("share-url").value = "https://ferrolho.github.io/magnet-player/#" + torrent.infoHash;
         var video = document.createElement("video");
         video.controls = true;
         video.autoplay = true;
         document.getElementById("output").appendChild(video);
         largestFile.streamTo(video);
-        $("#magnet-input").slideUp();
-        $("#hero").slideDown();
+        document.getElementById("magnet-input").hidden = true;
+        document.getElementById("hero").style.display = "block";
         torrent.on("done", onDone);
         setInterval(onProgress, 500);
         onProgress();
         function onProgress() {
-          $numPeers.text(torrent.numPeers + (torrent.numPeers === 1 ? " peer" : " peers"));
+          numPeers.textContent = torrent.numPeers + (torrent.numPeers === 1 ? " peer" : " peers");
           var percent = Math.round(torrent.progress * 100 * 100) / 100;
-          $progressBar.width(percent + "%");
-          $downloaded.text(prettyBytes(torrent.downloaded));
-          $total.text(prettyBytes(torrent.length));
-          var remaining;
+          progressBar.style.width = percent + "%";
+          downloaded.textContent = prettyBytes(torrent.downloaded);
+          total.textContent = prettyBytes(torrent.length);
+          var rem;
           if (torrent.done) {
-            remaining = "Done";
+            rem = "Done";
           } else {
-            remaining = moment.duration(torrent.timeRemaining / 1e3, "seconds").humanize();
-            remaining = remaining[0].toUpperCase() + remaining.substring(1) + " remaining";
+            rem = moment.duration(torrent.timeRemaining / 1e3, "seconds").humanize();
+            rem = rem[0].toUpperCase() + rem.substring(1) + " remaining";
           }
-          $remaining.text(remaining);
-          $downloadSpeed.text(prettyBytes(torrent.downloadSpeed) + "/s");
-          $uploadSpeed.text(prettyBytes(torrent.uploadSpeed) + "/s");
+          remaining.textContent = rem;
+          downloadSpeed.textContent = prettyBytes(torrent.downloadSpeed) + "/s";
+          uploadSpeed.textContent = prettyBytes(torrent.uploadSpeed) + "/s";
         }
         function onDone() {
-          $body.addClass("is-seed");
+          body.classList.add("is-seed");
           onProgress();
         }
       }
@@ -4149,28 +4149,19 @@
 
   // js/main.js
   require_webtorrent();
-  $("#share-url-btn").on("click", function() {
-    var text = $("#share-url").val();
-    navigator.clipboard.writeText(text).then(function() {
-      $("#share-url-btn").attr("title", "Copied!").tooltip("fixTitle").tooltip("show");
+  var shareBtn = document.getElementById("share-url-btn");
+  var shareUrl = document.getElementById("share-url");
+  shareBtn.addEventListener("click", function() {
+    navigator.clipboard.writeText(shareUrl.value).then(function() {
+      shareBtn.dataset.tooltip = "Copied!";
+      shareBtn.classList.add("tooltip-visible");
     });
   });
-  $(window).bind("resize", function() {
-    fitMagnetInput();
+  shareBtn.addEventListener("mouseleave", function() {
+    shareBtn.dataset.tooltip = "Copy to clipboard";
+    shareBtn.classList.remove("tooltip-visible");
   });
-  $(document).ready(function() {
-    $("#share-url").val(window.location.href);
-    $('[data-toggle="tooltip"]').tooltip();
-    $("#share-url-btn").mouseleave(function() {
-      $("#share-url-btn").attr("title", "Copy to clipboard").tooltip("fixTitle");
-    });
-    fitMagnetInput();
-  });
-  function fitMagnetInput() {
-    var formW = $("#magnet-input").width();
-    var buttonW = $("#magnet-input button").outerWidth();
-    $("#magnet-input input").outerWidth(formW - buttonW);
-  }
+  shareUrl.value = window.location.href;
 })();
 /*! Bundled license information:
 

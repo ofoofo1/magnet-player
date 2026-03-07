@@ -71,6 +71,7 @@ navigator.serviceWorker.register('sw.min.js', { scope: './' })
     })
     .catch(function (err) {
         console.error('Service worker registration failed:', err)
+        document.getElementById('magnet-input').querySelector('input').placeholder = 'Error: streaming not supported in this browser'
     })
 
 // Download by form input

@@ -7,6 +7,9 @@ shareBtn.addEventListener('click', function () {
     navigator.clipboard.writeText(shareUrl.value).then(function () {
         shareBtn.dataset.tooltip = 'Copied!';
         shareBtn.classList.add('tooltip-visible');
+    }).catch(function () {
+        shareBtn.dataset.tooltip = 'Failed to copy';
+        shareBtn.classList.add('tooltip-visible');
     });
 });
 

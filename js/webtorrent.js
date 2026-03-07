@@ -20,7 +20,7 @@ var announceList = [
 ['wss://tracker.files.fm:7073/announce'],
 ]
 
-global.WEBTORRENT_ANNOUNCE = announceList
+window.WEBTORRENT_ANNOUNCE = announceList
 .map(function (arr) {
 	return arr[0]
 })
@@ -54,6 +54,7 @@ navigator.serviceWorker.register('sw.min.js', { scope: './' })
 // Download by form input
 $('form').submit(function(e) {
 	e.preventDefault() // Prevent page refresh
+	if (!ready) return
 
 	var torrentId = $('form input[name=torrentId]').val()
 

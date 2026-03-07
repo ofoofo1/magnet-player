@@ -13,8 +13,8 @@
   // node_modules/moment/moment.js
   var require_moment = __commonJS({
     "node_modules/moment/moment.js"(exports, module) {
-      (function(global2, factory) {
-        typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : global2.moment = factory();
+      (function(global, factory) {
+        typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : global.moment = factory();
       })(exports, (function() {
         "use strict";
         var hookCallback;
@@ -4055,7 +4055,7 @@
         ["wss://tracker.webtorrent.dev"],
         ["wss://tracker.files.fm:7073/announce"]
       ];
-      global.WEBTORRENT_ANNOUNCE = announceList.map(function(arr) {
+      window.WEBTORRENT_ANNOUNCE = announceList.map(function(arr) {
         return arr[0];
       }).filter(function(url) {
         return url.indexOf("wss://") === 0 || url.indexOf("ws://") === 0;
@@ -4076,6 +4076,7 @@
       });
       $("form").submit(function(e) {
         e.preventDefault();
+        if (!ready) return;
         var torrentId = $("form input[name=torrentId]").val();
         if (torrentId.length > 0)
           downloadTorrent(torrentId);

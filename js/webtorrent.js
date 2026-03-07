@@ -28,6 +28,7 @@ const announceList = [
     ['wss://tracker.openwebtorrent.com'],
     ['wss://tracker.webtorrent.dev'],
     ['wss://tracker.files.fm:7073/announce'],
+    ['wss://tracker.novage.com.ua'],
 ]
 
 window.WEBTORRENT_ANNOUNCE = announceList
